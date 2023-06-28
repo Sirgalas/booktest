@@ -5,7 +5,7 @@ RUN apt-get update && \
     libjpeg-dev libfreetype6-dev jpegoptim optipng pngquant gifsicle\
     libjpeg62-turbo-dev libvpx-dev  libgd-dev libmagickwand-dev --no-install-recommends
 
-
+#RUN pecl install xdebug-2.7.1 && docker-php-ext-enable xdebug
 
 RUN pecl install imagick
 

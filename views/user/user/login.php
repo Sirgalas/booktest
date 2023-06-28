@@ -3,7 +3,7 @@
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
 
-/** @var app\models\LoginForm $model */
+/** @var Entities\User\Forms\LoginForm $model */
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]); ?>
 
-            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+            <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
 
             <?= $form->field($model, 'password')->passwordInput() ?>
 
@@ -44,11 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <?php ActiveForm::end(); ?>
-
-            <div style="color:#999;">
-                You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-                To modify the username/password, please check out the code <code>app\models\User::$users</code>.
-            </div>
 
         </div>
     </div>

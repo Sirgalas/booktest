@@ -32,6 +32,7 @@ services:
     volumes:
       - ./:/var/www
     environment:
+      DB_HOST: db
       XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1"
       PHP_IDE_CONFIG: "serverName=Docker"
     depends_on:

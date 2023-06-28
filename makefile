@@ -1,7 +1,7 @@
 SHELL = /bin/bash
 
 docker_compose_bin := $(shell command -v docker-compose 2> /dev/null)
-APP_CONTAINER_NAME := backend
+APP_CONTAINER_NAME := backend-cli
 NODE_CONTAINER_NAME := nodejs
 
 .DEFAULT_GOAL := help
@@ -28,6 +28,8 @@ shell: up ## Start shell in backend
 
 composer-install:
 	docker-compose run --rm backend composer install
+composer-update:
+	docker-compose run --rm backend composer update
 
 backend-migration:
 	shell php yii migrate
