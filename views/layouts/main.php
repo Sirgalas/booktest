@@ -4,11 +4,12 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
-use app\widgets\Alert;
-use yii\bootstrap5\Breadcrumbs;
-use yii\bootstrap5\Html;
-use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
+use app\Entities\User\Entity\PermissionEnum;
+use yii\bootstrap\Alert;
+use yii\bootstrap\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use yii\widgets\Breadcrumbs;
 
 AppAsset::register($this);
 
@@ -33,14 +34,14 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
     <?php
     $items = [
-        ['label' => 'Home', 'url' => ['/site/index']]
+        ['label' => 'Home', 'url' => ['/book']]
     ];
     if(Yii::$app->user->isGuest) {
-        $items[] = ['label' => 'Login', 'url' => ['/user/user/login']];
-        $items[] = ['label' => 'Signup', 'url' => ['/user/user/signup']];
+        $items[] = ['label' => 'Login', 'url' => ['/user/auth/login']];
+        $items[] = ['label' => 'Signup', 'url' => ['/user/auth/signup']];
     } else {
         $items[] = '<li class="nav-item">'
-            . Html::beginForm(['/user/user/logout'])
+            . Html::beginForm(['/user/auth/logout'])
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'nav-link btn btn-link logout']
@@ -48,13 +49,15 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             . Html::endForm()
             . '</li>';
     }
-    ?>
+    if(Yii::$app->user->can(PermissionEnum::ADMIN)){
+        $items[] = ['label' => 'Redact User','url' => ['/user/redact/update']];
+    }
+    $items[] = ['label' => 'Author', 'url' => ['/author']];
 
-    <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+        'options' => ['class' => 'navbar navbar-inverse']
     ]);
 
     echo Nav::widget([

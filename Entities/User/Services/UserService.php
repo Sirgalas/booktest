@@ -16,8 +16,12 @@ class UserService
             $signupForm->email,
             $signupForm->password
         );
-
         $user->save($user);
+
+        $auth = Yii::$app->authManager;
+        $authorRole = $auth->getRole(User::GUEST);
+        $auth->assign($authorRole, $user->getId());
+
         return $user;
     }
 

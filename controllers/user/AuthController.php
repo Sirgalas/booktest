@@ -10,7 +10,7 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
 
-class UserController extends Controller
+class AuthController extends Controller
 {
     public function behaviors()
     {

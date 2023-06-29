@@ -23,6 +23,14 @@ use yii\db\ActiveRecord;
 
 class User  extends ActiveRecord implements \yii\web\IdentityInterface
 {
+    public const ADMIN = 'admin';
+    public const USER = 'user';
+    public const GUEST = 'guest';
+
+    public static $roles = [
+        self::USER => self::USER,
+        self::GUEST => self::GUEST
+    ];
 
     public static function create(string $username, string $email, string $password): self
     {
