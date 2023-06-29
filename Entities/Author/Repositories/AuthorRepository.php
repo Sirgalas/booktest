@@ -38,4 +38,9 @@ class AuthorRepository
         $Author = $this->one($id);
         $Author->delete();
     }
+
+    public static function getAll(): array
+    {
+        return Author::find()->all();
+    }
 }

@@ -6,8 +6,11 @@ use app\Entities\Author\Entity\Author;
 use app\Entities\Author\Entity\BookAuthor;
 use app\Entities\Book\Form\BookForm;
 use app\Entities\File\Entity\File;
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use Yii;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "book".
@@ -25,6 +28,18 @@ use yii\db\ActiveQuery;
  */
 class Book extends \yii\db\ActiveRecord
 {
+
+    const PATH_FIRST='book';
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class'     => SaveRelationsBehavior::class,
+                'relations' => ['file','authors'],
+            ],
+        ];
+    }
 
     public static function create(BookForm $form): self
     {
@@ -52,11 +67,6 @@ class Book extends \yii\db\ActiveRecord
         return 'book';
     }
 
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -68,7 +78,6 @@ class Book extends \yii\db\ActiveRecord
             'file_id' => 'File ID',
         ];
     }
-
 
     public function getAuthors(): ActiveQuery
     {
@@ -84,4 +93,57 @@ class Book extends \yii\db\ActiveRecord
     {
         return $this->hasOne(File::class, ['id' => 'file_id']);
     }
+
+    public function addFile(UploadedFile $file)
+    {
+
+        if (is_object($this->file)) {
+            $this->file->deleteFiles();
+        }
+        $fileUpload = File::create($file, $this->getUrl(), );
+        $this->updateFile($fileUpload);
+    }
+
+    public function getUrl() {
+        return self::PATH_FIRST;
+    }
+
+    public function addAuthors(Author $author): void
+    {
+        $authors = $this->authors;
+        foreach ($authors as $oneAuthor) {
+            if($oneAuthor->isHasAuthor($author->id)) {
+                return;
+            }
+        }
+        $authors[] = $author;
+        $this->authors = $authors;
+    }
+
+    public function removeAuthor(int $id) {
+        $authors = $this->authors;
+        foreach ($authors as  $key => $author) {
+            if($author->isHasAuthor($id)) {
+                unset($authors[$key]);
+            }
+        }
+        $this->authors = $authors;
+    }
+
+    public function dropAuthor(int $authorId) {
+        foreach ($this->authors as $oneAuthor) {
+            if($oneAuthor->id == $authorId) {
+
+            }
+        }
+    }
+
+    private function updateFile($files): void
+    {
+        $this->file = $files;
+    }
+
+
+
+
 }

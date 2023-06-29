@@ -58,4 +58,8 @@ class Author extends \yii\db\ActiveRecord
     {
         return implode(" ",[$this->name,$this->surname,$this->family]);
     }
+
+    public function isHasAuthor(int $id) {
+        return $this->id == $id;
+    }
 }

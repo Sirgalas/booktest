@@ -17,7 +17,7 @@ class AuthorsBookForm extends Model
                 'exist',
                 'skipOnError' => true,
                 'targetClass' => Author::class,
-                'targetAttribute' => ['file_id' => 'id']
+                'targetAttribute' => ['author_id' => 'id']
             ],
         ];
     }

@@ -2,16 +2,21 @@
 
 namespace app\controllers;
 
+use app\Entities\Author\Repositories\AuthorRepository;
 use app\Entities\Book\Entity\Book;
 use app\Entities\Book\Entity\BookSearch;
+use app\Entities\Book\Form\AuthorsBookForm;
 use app\Entities\Book\Form\BookForm;
 use app\Entities\Book\Services\BookService;
+use app\Entities\File\Form\UploadForm;
 use app\Entities\User\Entity\PermissionEnum;
+use PharIo\Manifest\Author;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * BookController implements the CRUD actions for Book model.
@@ -122,5 +127,60 @@ class BookController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionUpload(int $id)
+    {
+        $form = new UploadForm();
+        $book = $this->service->repository->one($id);
 
+        if (Yii::$app->request->isPost) {
+            $transaction = Yii::$app->db->beginTransaction();
+            $form->file = UploadedFile::getInstance($form, 'file');
+            try {
+                $this->service->upload($form,$book);
+                $transaction->commit();
+            } catch (\RuntimeException $e) {
+                Yii::error($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+                $transaction->rollBack();
+            }
+        }
+        return $this->render('upload',['model' => $form, 'book' => $book]);
+    }
+
+    public function actionAddAuthor(int $id) {
+        $form = new AuthorsBookForm();
+        $book = $this->service->repository->one($id);
+        if($this->request->isPost && $form->load($this->request->post()) && $form->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try{
+                $this->service->addAuthor($form,$book);
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $book->id]);
+            } catch (\RuntimeException $e) {
+                Yii::error($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
+        }
+        $authors = AuthorRepository::getAll();
+        return $this->render("add-author",[
+            'model' => $form,
+            "authors" => $authors
+        ]);
+    }
+
+    public function actionRemoveAuthor(int $book_id, int $author_id){
+        $book = $this->service->repository->one($book_id);
+        if($this->request->isPost) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try{
+                $this->service->removeAuthor($author_id,$book);
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $book->id]);
+            } catch (\RuntimeException $e) {
+                Yii::error($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
+        }
+        return $this->redirect(['view', 'id' => $book->id]);
+    }
 }

@@ -68,6 +68,8 @@ migrations-migrate:
 migrations-rbac:
 	docker-compose run --rm backend php yii migrate --migrationPath=@yii/rbac/migrations --interactive=0
 
-rbac-init
-    docker-compose run --rm backend php yii rbac/init
+init-rbac:
+	docker-compose run --rm backend php yii rbac/init
+
+
 

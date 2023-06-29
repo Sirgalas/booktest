@@ -31,7 +31,7 @@ composer.lock
 phpunit.phar
 # local phpunit config
 /phpunit.xml
-
+/web/files
 tests/_output/*
 tests/_support/_generated
 

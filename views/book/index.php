@@ -25,46 +25,38 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     <?php endif; ?>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-
+            [
+                'attribute' => 'image',
+                'format' => 'raw',
+                'value' => function(Book $book) {
+                    if(is_object($book->file)) {
+                        return Html::img($book->file->getUrl());
+                    }
+                    return null;
+                }
+            ],
             'title',
             'year',
             'isbn',
-            //'file_id',
             [
                 'class' => ActionColumn::class,
-                'template' => HelperView::template(PermissionEnum::USER,'{update} {delete} {history} {upload} {add-author}'),
-                /*'urlCreator' => function ($action, Book $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 },*/
+                'template' => HelperView::template(PermissionEnum::USER,'{update} {delete} {history} {upload} '),
                 'buttons' => [
                     'upload' => function ($url, $model) {
                         return Html::a(
                             '<span class="fas fa-image"></span>',
                             $url,
                             [
-                                'class'       => 'dropdown-item',
-                                'data-method' => 'post',
+                                'class'       => 'dropdown-item'
                             ]
                         );
                     },
-                    'add-author' => function ($url, $model, $key) {
-                        return Html::a(
-                            '<span class="fas fa-user-plus"></span>',
-                            $url,
-                            [
-                                'class'       => 'dropdown-item',
-                                'data-method' => 'post',
-                            ]
-                        );
-                    }
                 ]
             ],
         ],
