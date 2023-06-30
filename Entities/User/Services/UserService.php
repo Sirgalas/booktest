@@ -14,7 +14,8 @@ class UserService
         $user=User::create(
             $signupForm->username,
             $signupForm->email,
-            $signupForm->password
+            $signupForm->password,
+            $signupForm->phone
         );
         $user->save($user);
 

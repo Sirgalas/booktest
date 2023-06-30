@@ -2,8 +2,10 @@
 
 namespace app\controllers\user;
 
+use app\Entities\User\Entity\PermissionEnum;
 use app\Entities\User\Entity\User;
 use app\Entities\User\Entity\UserSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,8 +23,24 @@ class RedactController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['logout'],
+                    'rules' => [
+                        [
+                            'actions' => ['view','edit'],
+                            'allow' => true,
+                            'roles' => [PermissionEnum::GUEST]
+                        ],
+                        [
+                            'actions' => ['index','delete'],
+                            'allow' => true,
+                            'roles' => [PermissionEnum::USER],
+                        ],
+                    ],
+                ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],

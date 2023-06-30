@@ -35,7 +35,7 @@ class BookController extends Controller
                     'only' => ['logout'],
                     'rules' => [
                         [
-                            'actions' => ['index'],
+                            'actions' => ['index','view'],
                             'allow' => true,
                             'roles' => [PermissionEnum::GUEST]
                         ],

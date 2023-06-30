@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property string $username
  * @property string $password_hash
  * @property string $email
+ * @property string $phone
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
@@ -32,11 +33,12 @@ class User  extends ActiveRecord implements \yii\web\IdentityInterface
         self::GUEST => self::GUEST
     ];
 
-    public static function create(string $username, string $email, string $password): self
+    public static function create(string $username, string $email, string $password,string $phone): self
     {
         $user = new User();
         $user->username = $username;
         $user->email = $email;
+        $user->phone = $phone;
         $user->setPassword(!empty($password) ? $password : Yii::$app->security->generateRandomString());
         $user->created_at = time();
         $user->updated_at = time();

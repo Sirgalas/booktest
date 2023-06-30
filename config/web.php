@@ -46,7 +46,9 @@ $config = [
             ],
         ],
         'db' => $db,
-
+        'fixture' => [
+            'class' => 'yii\faker\FixtureController',
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
