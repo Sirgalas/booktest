@@ -130,13 +130,7 @@ class Book extends \yii\db\ActiveRecord
         $this->authors = $authors;
     }
 
-    public function dropAuthor(int $authorId) {
-        foreach ($this->authors as $oneAuthor) {
-            if($oneAuthor->id == $authorId) {
 
-            }
-        }
-    }
 
     private function updateFile($files): void
     {

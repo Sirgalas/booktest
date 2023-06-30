@@ -73,8 +73,17 @@ class AuthorController extends Controller
 
     public function actionView($id)
     {
+        try{
+            $model = $this->service->repository->one($id);
+            $user = $this->service->userRepository->one(Yii::$app->user->id);
+        } catch (\RuntimeException $e) {
+            Yii::error($e);
+            Yii::$app->session->setFlash('error', $e->getMessage());
+        }
+
         return $this->render('view', [
-            'model' => $this->service->repository->one($id),
+            'model' => $model,
+            'user' => $user
         ]);
     }
 
@@ -99,13 +108,6 @@ class AuthorController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Author model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -114,7 +116,7 @@ class AuthorController extends Controller
         if ($this->request->isPost && $form->load($this->request->post()) && $form->save()) {
             try {
                 $this->service->edit($form,$model);
-                return $this->redirect(['view', 'id' => $form->id]);
+                return $this->redirect(['view', 'id' => $model->id]);
             } catch (RuntimeException $e) {
                 Yii::error($e);
                 Yii::$app->session->setFlash('error', $e->getMessage());
@@ -130,6 +132,13 @@ class AuthorController extends Controller
         $this->service->repository->remove($id);
 
         return $this->redirect(['index']);
+    }
+
+    public function actionTopTen() {
+        $dataProvider = $this->service->repository->topTen();
+        return $this->render('top-ten', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
 }

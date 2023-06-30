@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'isbn',
             [
                 'class' => ActionColumn::class,
-                'template' => HelperView::template(PermissionEnum::USER,'{update} {delete} {history} {upload} '),
+                'template' => HelperView::template(PermissionEnum::USER,'{update} {delete} {upload} '),
                 'buttons' => [
                     'upload' => function ($url, $model) {
                         return Html::a(

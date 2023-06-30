@@ -39,6 +39,10 @@ services:
       - db
     networks:
       - internal
+  redis:
+    image: "redis"
+    networks:
+      - internal
 networks:
   internal:
     driver: bridge

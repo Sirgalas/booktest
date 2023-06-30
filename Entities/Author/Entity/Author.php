@@ -4,6 +4,8 @@ namespace app\Entities\Author\Entity;
 
 use app\Entities\Author\Form\AuthorForm;
 use app\Entities\Book\Entity\Book;
+use app\Entities\User\Entity\User;
+use app\Entities\User\Entity\UserAuthor;
 use Yii;
 use yii\db\ActiveQuery;
 
@@ -17,6 +19,8 @@ use yii\db\ActiveQuery;
  *
  * @property BookAuthor[] $bookAuthors
  * @property Book[] $books
+ * @property UserAuthor[] $userAuthors
+ * @property User[] $users
  */
 class Author extends \yii\db\ActiveRecord
 {
@@ -52,6 +56,16 @@ class Author extends \yii\db\ActiveRecord
     public function getBooks()
     {
         return $this->hasMany(Book::class, ['id' => 'book_id'])->via('bookAuthors');
+    }
+
+    public function getUserAuthors(): ActiveQuery
+    {
+        return $this->hasMany(UserAuthor::class, ['author_id' => 'id']);
+    }
+
+    public function getUsers()
+    {
+        return $this->hasMany(User::class, ['id' => 'user_id'])->via('userAuthors');
     }
 
     public function getFullName(): string

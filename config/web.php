@@ -1,5 +1,5 @@
 <?php
-
+use yii\queue\redis\Queue;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -46,8 +46,19 @@ $config = [
             ],
         ],
         'db' => $db,
+        'redis' => [
+            'class' => Connection::class,
+            'hostname'=>'redis',
+            'retries' => 1,
+        ],
         'fixture' => [
             'class' => 'yii\faker\FixtureController',
+        ],
+        'queue' => [
+            'class' => Queue::class,
+            'redis' => 'redis',
+            'channel' => 'queue-ct',
+            'as log' => LogBehavior::class,
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,

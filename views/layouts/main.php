@@ -40,7 +40,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         $items[] = ['label' => 'Login', 'url' => ['/user/auth/login']];
         $items[] = ['label' => 'Signup', 'url' => ['/user/auth/signup']];
     } else {
-        $items[] = '<li class="nav-item">'
+        $items[] = '<li>'
             . Html::beginForm(['/user/auth/logout'])
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
@@ -50,9 +50,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             . '</li>';
     }
     if(Yii::$app->user->can(PermissionEnum::ADMIN)){
-        $items[] = ['label' => 'Redact User','url' => ['/user/redact/update']];
+        $items[] = ['label' => 'Users','url' => ['/user/redact/index']];
     }
     $items[] = ['label' => 'Author', 'url' => ['/author']];
+    $items[] = ['label' => 'Author top 10', 'url' => ['/author/top-ten']];
+    $items[] = ['label' => 'Cabinet', 'url' => ['/user/redact/view']];
+
 
     NavBar::begin([
         'brandLabel' => Yii::$app->name,

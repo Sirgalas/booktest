@@ -2,8 +2,12 @@
 
 namespace app\Entities\User\Entity;
 
+use app\Entities\Author\Entity\Author;
+use app\Entities\User\Entity\Auth\AuthAssignment;
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use Yii;
 use yii\base\NotSupportedException;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -20,6 +24,10 @@ use yii\db\ActiveRecord;
  * @property integer $updated_at
  * @property string $password write-only password
  *
+ * @property Author[] $authors
+ * @property UserAuthor[] $userAuthors
+ * @property AuthAssignment $assignment
+ *
  */
 
 class User  extends ActiveRecord implements \yii\web\IdentityInterface
@@ -32,6 +40,16 @@ class User  extends ActiveRecord implements \yii\web\IdentityInterface
         self::USER => self::USER,
         self::GUEST => self::GUEST
     ];
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class'     => SaveRelationsBehavior::class,
+                'relations' => ['authors'],
+            ],
+        ];
+    }
 
     public static function create(string $username, string $email, string $password,string $phone): self
     {
@@ -140,4 +158,43 @@ class User  extends ActiveRecord implements \yii\web\IdentityInterface
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
+
+
+    public function getAuthors(): ActiveQuery
+    {
+        return $this->hasMany(Author::class, ['id' => 'author_id'])->via('userAuthors');
+    }
+
+    public function getUserAuthors(): ActiveQuery
+    {
+        return $this->hasMany(UserAuthor::class, ['user_id' => 'id']);
+    }
+
+    public function getAuthAssignment(): ActiveQuery
+    {
+        return $this->hasOne(AuthAssignment::class,['user_id' => 'id']);
+    }
+
+    public function addAuthors(Author $author): void
+    {
+        $authors = $this->authors;
+        foreach ($authors as $oneAuthor) {
+            if($oneAuthor->isHasAuthor($author->id)) {
+                return;
+            }
+        }
+        $authors[] = $author;
+        $this->authors = $authors;
+    }
+
+    public function removeAuthor(int $id) {
+        $authors = $this->authors;
+        foreach ($authors as  $key => $author) {
+            if($author->isHasAuthor($id)) {
+                unset($authors[$key]);
+            }
+        }
+        $this->authors = $authors;
+    }
+
 }

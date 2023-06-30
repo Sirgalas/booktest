@@ -20,6 +20,8 @@
         "bower-asset/bootstrap": "3.4.* | 3.3.* | 3.2.* | 3.1.*",
         "yiisoft/yii2-bootstrap": "^2.0",
         "rmrevin/yii2-fontawesome": "~3.5",
+        "yiisoft/yii2-redis": "~2.0.0",
+        "yiisoft/yii2-queue": "~2.0",
         "la-haute-societe/yii2-save-relations-behavior": "^1.7"
     },
     "require-dev": {

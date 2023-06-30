@@ -1,41 +1,37 @@
 <?php
 
-use app\Entities\User\Entity\User;
+use app\Entities\Author\Entity\Author;
+use app\Entities\User\Entity\PermissionEnum;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\Entities\User\Entity\UserSearch $searchModel */
+/** @var app\Entities\Author\Entity\AuthorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Users';
+$this->title = 'Authors top 10';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
+<div class="author-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
-            'username',
-            'email:email',
-            'phone',
+            'name',
+            'surname',
+            'family',
             [
                 'class' => ActionColumn::class,
-                'template' => '{update}'
+                'template' => '{view}',
+                'urlCreator' => function ($action, $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model['id']]);
+                 }
             ],
         ],
     ]); ?>

@@ -5,6 +5,9 @@ namespace app\Entities\Author\Repositories;
 use app\Entities\Author\Entity\Author;
 use app\Helpers\RequestHelper;
 use RuntimeException;
+use yii\data\SqlDataProvider;
+use yii\db\ActiveQuery;
+use yii\db\DataReader;
 
 class AuthorRepository
 {
@@ -37,6 +40,34 @@ class AuthorRepository
     {
         $Author = $this->one($id);
         $Author->delete();
+    }
+
+    public function topTen():SqlDataProvider
+    {
+        $sql = '
+            select *, (
+                select
+                    count(*)
+                from
+                    book
+                where
+                    book.id in (
+                        select
+                            book_id
+                        from
+                            book_author
+                        where
+                            author_id = a.id
+                    )
+                ) as bc
+            from author a
+            order by bc desc
+            limit 10;
+        ';
+        return new SqlDataProvider([
+            'sql' => $sql,
+            'totalCount' =>10
+        ]);
     }
 
     public static function getAll(): array
