@@ -1,12 +1,15 @@
 <?php
 
+use yii\queue\redis\Queue;
+use yii\redis\Connection;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log','queue'],
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -14,7 +17,16 @@ $config = [
         '@tests' => '@app/tests',
     ],
     'components' => [
-
+        'redis' => [
+            'class' => Connection::class,
+            'hostname'=>'redis',
+            'retries' => 1,
+        ],
+        'queue' => [
+            'class' => Queue::class,
+            'redis' => 'redis',
+            'channel' => 'queue',
+        ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],

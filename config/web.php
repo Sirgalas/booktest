@@ -1,5 +1,8 @@
 <?php
 use yii\queue\redis\Queue;
+use yii\redis\Connection;
+use yii\queue\LogBehavior;
+use yii\log\FileTarget;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -7,7 +10,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log','queue'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -42,6 +45,12 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => FileTarget::class,
+                    'levels' => ['info'],
+                    'categories' => ['add_author'],
+                    'logFile' => '@app/runtime/logs/add_author.log',
                 ],
             ],
         ],
@@ -80,6 +89,9 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
+        'panels' => [
+            'queue' => \yii\queue\debug\Panel::class,
+        ],
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['*'],
     ];

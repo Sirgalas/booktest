@@ -6,6 +6,8 @@ use app\Entities\Author\Entity\Author;
 use app\Entities\Author\Entity\BookAuthor;
 use app\Entities\Book\Form\BookForm;
 use app\Entities\File\Entity\File;
+use app\Queue\MessageJob;
+use app\Senders\FlashSend;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use Yii;
 use yii\db\ActiveQuery;
@@ -118,6 +120,11 @@ class Book extends \yii\db\ActiveRecord
         }
         $authors[] = $author;
         $this->authors = $authors;
+        Yii::$app->queue->push(new MessageJob([
+            'sender' => new FlashSend(),
+            'author_id' => $author->id,
+            'book_title' => $this->title
+        ]));
     }
 
     public function removeAuthor(int $id) {
