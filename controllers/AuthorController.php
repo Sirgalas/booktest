@@ -134,8 +134,12 @@ class AuthorController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionTopTen() {
-        $dataProvider = $this->service->repository->topTen();
+    public function actionTopTen(string $year = null) {
+
+        if(!$year) {
+            $year = date('Y');
+        }
+        $dataProvider = $this->service->repository->topTen($year);
         return $this->render('top-ten', [
             'dataProvider' => $dataProvider,
         ]);

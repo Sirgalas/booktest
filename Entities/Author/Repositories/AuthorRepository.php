@@ -42,9 +42,9 @@ class AuthorRepository
         $Author->delete();
     }
 
-    public function topTen():SqlDataProvider
+    public function topTen(string $year):SqlDataProvider
     {
-        $sql = '
+        $sql = "
             select *, (
                 select
                     count(*)
@@ -58,12 +58,15 @@ class AuthorRepository
                             book_author
                         where
                             author_id = a.id
+                        
                     )
+                and 
+                    book.year = $year
                 ) as bc
             from author a
             order by bc desc
             limit 10;
-        ';
+        ";
         return new SqlDataProvider([
             'sql' => $sql,
             'totalCount' =>10
