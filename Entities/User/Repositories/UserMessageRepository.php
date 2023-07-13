@@ -23,4 +23,12 @@ class UserMessageRepository
     {
         return UserMessage::find()->where(['user_id' => $user->id, 'is_view' => false])->all();
     }
+
+    public function one(int $id): UserMessage
+    {
+        if(!$message = UserMessage::findOne($id)) {
+            throw new NotFoundHttpException('message not find');
+        }
+        return $message;
+    }
 }

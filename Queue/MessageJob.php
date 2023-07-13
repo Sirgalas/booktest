@@ -3,9 +3,7 @@
 namespace app\Queue;
 
 use app\Entities\Author\Entity\Author;
-use app\Entities\Book\Entity\Book;
 use app\Senders\AbstractSender;
-use Yii;
 use yii\helpers\ArrayHelper;
 
 class MessageJob extends \yii\base\BaseObject implements \yii\queue\JobInterface

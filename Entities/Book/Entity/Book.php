@@ -121,7 +121,6 @@ class Book extends \yii\db\ActiveRecord
         }
         $authors[] = $author;
         $this->authors = $authors;
-        //RequestHelper::setMessage($author->id,$this->title,new FlashSend());
         Yii::$app->queue->push(new MessageJob([
             'sender' => new FlashSend(),
             'author_id' => $author->id,

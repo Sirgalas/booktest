@@ -32,7 +32,6 @@ class BookController extends Controller
             [
                 'access' => [
                     'class' => AccessControl::class,
-                    'only' => ['logout'],
                     'rules' => [
                         [
                             'actions' => ['index','view'],

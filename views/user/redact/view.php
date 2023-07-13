@@ -23,6 +23,17 @@ YiiAsset::register($this);
 ?>
 <div class="user-view">
 
+    <?php if(!empty($model->messagesView)): ?>
+
+        <?php foreach ($model->messagesView as $message): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close message-author-delete" data-dismiss="alert" aria-label="Close" data-id="<?= $message->id?>"><span aria-hidden="true">&times;</span></button>
+                <?= $message->message ?>
+            </div>
+        <?php endforeach; ?>
+
+    <?php endif; ?>
+
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= DetailView::widget([

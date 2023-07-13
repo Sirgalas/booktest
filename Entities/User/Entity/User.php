@@ -27,6 +27,8 @@ use yii\db\ActiveRecord;
  * @property Author[] $authors
  * @property UserAuthor[] $userAuthors
  * @property AuthAssignment $authAssignment
+ * @property UserMessage[] $messages
+ * @property UserMessage[] $messagesView
  *
  */
 
@@ -158,6 +160,15 @@ class User  extends ActiveRecord implements \yii\web\IdentityInterface
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
+    public function getMessages(): ActiveQuery
+    {
+        return $this->hasMany(UserMessage::class,['user_id' => 'id']);
+    }
+
+    public function getMessagesView(): ActiveQuery
+    {
+        return $this->getMessages()->where(['is_view' => 0]);
+    }
 
     public function getAuthors(): ActiveQuery
     {

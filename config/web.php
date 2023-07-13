@@ -66,7 +66,7 @@ $config = [
         'queue' => [
             'class' => Queue::class,
             'redis' => 'redis',
-            'channel' => 'queue-ct',
+            'channel' => 'queue-book',
             'as log' => LogBehavior::class,
         ],
         'urlManager' => [
