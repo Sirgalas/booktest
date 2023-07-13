@@ -41,6 +41,8 @@ services:
       - internal
   redis:
     image: "redis"
+    ports:
+      - ${REDIS_PORT}:6379
     networks:
       - internal
 networks:

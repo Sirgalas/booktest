@@ -6,6 +6,7 @@ use app\Entities\Author\Entity\Author;
 use app\Entities\Author\Entity\BookAuthor;
 use app\Entities\Book\Form\BookForm;
 use app\Entities\File\Entity\File;
+use app\Helpers\RequestHelper;
 use app\Queue\MessageJob;
 use app\Senders\FlashSend;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
@@ -120,6 +121,7 @@ class Book extends \yii\db\ActiveRecord
         }
         $authors[] = $author;
         $this->authors = $authors;
+        //RequestHelper::setMessage($author->id,$this->title,new FlashSend());
         Yii::$app->queue->push(new MessageJob([
             'sender' => new FlashSend(),
             'author_id' => $author->id,

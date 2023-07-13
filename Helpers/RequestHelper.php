@@ -2,6 +2,9 @@
 
 namespace app\Helpers;
 
+use app\Entities\Author\Entity\Author;
+use yii\helpers\ArrayHelper;
+
 class RequestHelper
 {
     public static function errorsToStr (array $errorsArray)
@@ -34,5 +37,16 @@ class RequestHelper
             }
         }
         return $errors;
+    }
+
+    public static function setMessage($author_id, $book_title,$sender)
+    {
+        $author = Author::findOne($author_id);
+        $usersIdSubscribeAuthor = ArrayHelper::getColumn($author->users, 'id');
+        $message = sprintf("%s add book %s", $author->getFullName(), $book_title);
+
+        foreach ($usersIdSubscribeAuthor as $userIdSubscribeAuthor) {
+            $sender->send($userIdSubscribeAuthor, $message);
+        }
     }
 }

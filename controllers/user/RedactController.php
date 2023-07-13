@@ -88,7 +88,8 @@ class RedactController extends Controller
             $this->service->redactRole($form,$model);
         }
         return $this->render('update', [
-            'model' => $model,
+            'model' => $form,
+            'user' =>$model
         ]);
     }
 

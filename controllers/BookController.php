@@ -117,6 +117,7 @@ class BookController extends Controller
         }
         return $this->render('update', [
             'model' => $form,
+            'book' => $model
         ]);
     }
 

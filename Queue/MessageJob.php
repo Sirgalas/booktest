@@ -18,6 +18,7 @@ class MessageJob extends \yii\base\BaseObject implements \yii\queue\JobInterface
     public $author_id;
 
     public $book_title;
+
     public function execute($queue)
     {
         $author = Author::findOne($this->author_id);

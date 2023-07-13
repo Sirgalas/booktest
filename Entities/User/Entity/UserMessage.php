@@ -6,6 +6,7 @@ use app\Entities\User\Forms\MessageForm;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "user_message".
@@ -23,10 +24,10 @@ class UserMessage extends \yii\db\ActiveRecord
 {
     public static function create(int $user_id, $message): self
     {
-        $message = new static();
-        $message->user_id = $user_id;
-        $message->message = $message;
-        return $message;
+        $userMessage = new static();
+        $userMessage->user_id = $user_id;
+        $userMessage->message = $message;
+        return $userMessage;
     }
 
     public function edit(): void
@@ -41,6 +42,7 @@ class UserMessage extends \yii\db\ActiveRecord
                 'class' => TimestampBehavior::class,
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
+                'value' =>new Expression('NOW()')
             ],
         ];
     }

@@ -14,10 +14,6 @@ class FlashSend implements AbstractSender
     {
         try{
             $messageUser = UserMessage::create($user_id, $message);
-            Yii::info([
-                'class' => self::class,
-                'string' => 22
-            ]);
             UserMessageRepository::save($messageUser);
         } catch (\RuntimeException $e) {
             Yii::info([

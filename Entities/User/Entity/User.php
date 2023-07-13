@@ -26,7 +26,7 @@ use yii\db\ActiveRecord;
  *
  * @property Author[] $authors
  * @property UserAuthor[] $userAuthors
- * @property AuthAssignment $assignment
+ * @property AuthAssignment $authAssignment
  *
  */
 
@@ -82,7 +82,6 @@ class User  extends ActiveRecord implements \yii\web\IdentityInterface
     {
         return '{{%user}}';
     }
-
 
     /**
      * @inheritdoc

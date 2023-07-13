@@ -110,7 +110,7 @@ class AuthorController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = $this->service->repository->one($id);
         $form = new AuthorForm($model);
 
         if ($this->request->isPost && $form->load($this->request->post()) && $form->save()) {
@@ -124,6 +124,7 @@ class AuthorController extends Controller
         }
         return $this->render('update', [
             'model' => $form,
+            'author' => $model
         ]);
     }
 

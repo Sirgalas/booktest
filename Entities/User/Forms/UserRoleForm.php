@@ -13,8 +13,8 @@ class UserRoleForm extends Model
 
     public function __construct(User $user,$config = [])
     {
-        if(is_object($user->assignment)) {
-            $this->role = $user->assignment->item_name;
+        if(is_object($user->authAssignment)) {
+            $this->role = $user->authAssignment->item_name;
         }
         parent::__construct($config);
     }
