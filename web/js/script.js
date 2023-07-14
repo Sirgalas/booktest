@@ -3,5 +3,8 @@ deleteAuthorMessage.addEventListener("click",(event) => {
     let messageId = event.target.parentNode.getAttribute('data-id');
     let parrent = event.target.parentNode.parentNode;
      fetch('/message/visible?id=' + messageId,{method: "POST"})
-        .then(parrent.remove());
+        .then(request => {
+            console.log(request);
+            parrent.remove();
+        });
 })
